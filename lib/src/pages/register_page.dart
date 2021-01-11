@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:messages_app/src/helpers/mostrat_alerta.dart';
+import 'package:messages_app/src/services/auth_service.dart';
 import 'package:messages_app/src/widgets/blue_button.dart';
 
 import 'package:messages_app/src/widgets/custom_input.dart';
 import 'package:messages_app/src/widgets/logo.dart';
 import 'package:messages_app/src/widgets/labels.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -51,6 +54,7 @@ class __FormState extends State<_Form> {
   final passCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -75,11 +79,25 @@ class __FormState extends State<_Form> {
             isPassword: true,
           ),
           BlueButton(
-            onPressed: () {
-              print(emailCtrl.text);
-              print(passCtrl.text);
-            },
-            text: "Login",
+            onPressed: authService.autenticando
+                ? null
+                : () async {
+                    final regisOk = await authService.register(
+                      nameCtrl.text.trim(),
+                      emailCtrl.text.trim(),
+                      passCtrl.text.trim(),
+                    );
+                    if (regisOk.ok) {
+                      Navigator.pushReplacementNamed(context, "usuarios");
+                    } else {
+                      mostrarAlerta(
+                        context,
+                        "Registro fallido",
+                        regisOk.msg,
+                      );
+                    }
+                  },
+            text: "Register",
           )
         ],
       ),

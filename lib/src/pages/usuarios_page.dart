@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:messages_app/src/services/auth_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:messages_app/src/models/user.dart';
 
@@ -18,11 +20,13 @@ class _UsuariosPageState extends State<UsuariosPage> {
   ];
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final user = authService.user;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Mi Nombre",
+          user.nombre,
           style: TextStyle(color: Colors.black54),
         ),
         elevation: 1,
@@ -32,7 +36,11 @@ class _UsuariosPageState extends State<UsuariosPage> {
             Icons.exit_to_app,
             color: Colors.black54,
           ),
-          onPressed: () {},
+          onPressed: () async {
+            //TODO: Desconectar el socket server
+            await AuthService.deleteToken();
+            Navigator.pushReplacementNamed(context, "login");
+          },
         ),
         actions: [
           Container(
