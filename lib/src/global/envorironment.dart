@@ -2,9 +2,9 @@ import 'dart:io';
 
 class Environments {
   static String apiUrl = Platform.isAndroid
-      ? "http://192.168.100.229:3000/api"
-      : "http://localhost:3000/api";
+      ? "https://chat-app-server-flutter.herokuapp.com/api"
+      : "https://chat-app-server-flutter.herokuapp.com/api";
   static String socketUrl = Platform.isAndroid
-      ? "http://192.168.100.229:3000"
-      : "http://localhost:3000";
+      ? "https://chat-app-server-flutter.herokuapp.com"
+      : "https://chat-app-server-flutter.herokuapp.com";
 }
