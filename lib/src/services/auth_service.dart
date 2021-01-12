@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -51,13 +50,16 @@ class AuthService with ChangeNotifier {
         body: jsonEncode(data),
         headers: {"Content-Type": "application/json"},
       );
-      loginResp = loginRespFromJson(resp.body);
+      loginResp = (resp.body == null)
+          ? LoginResp(ok: false)
+          : loginRespFromJson(resp.body);
       if (resp.statusCode == 200) {
         this.user = loginResp.user;
         await this._saveToken(loginResp.token);
       }
     } catch (e) {
       print(e);
+      loginResp = LoginResp(ok: false);
     }
     this.autenticando = false;
     return loginResp;
@@ -114,7 +116,6 @@ class AuthService with ChangeNotifier {
       if (resp.statusCode == 200) {
         final loginResp = loginRespFromJson(resp.body);
         this.user = loginResp.user;
-        print(resp.body);
         await this._saveToken(loginResp.token);
         return true;
       } else {

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
   final String uid;
+  final String uidLocal;
   final String message;
   final AnimationController animationController;
   const ChatBubble({
     @required this.uid,
     @required this.message,
     @required this.animationController,
+    @required this.uidLocal,
   });
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class ChatBubble extends StatelessWidget {
           curve: Curves.easeOut,
         ),
         child: Container(
-          child: this.uid == "123" ? _myMessage() : _notMyMessage(),
+          child: this.uid == this.uidLocal ? _myMessage() : _notMyMessage(),
         ),
       ),
     );
